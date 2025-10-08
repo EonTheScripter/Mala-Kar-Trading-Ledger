@@ -1024,6 +1024,109 @@
             activeTab.style.maxHeight = calculateVisibleHeight(activeTab) + 'px';
             updateWidths();
         });
+
+        // Item-to-image mapping (update manually for new items)
+const itemImageMap = {
+    "Beholder Shield": "https://i.imgur.com/pOpXi9a.png",
+    "Blue Robe": "https://i.imgur.com/lugBdm0.gif",
+    "Boots of Haste": "https://i.imgur.com/aNyF0Xn.png",
+    "Bright Sword": "https://i.imgur.com/QIYi3mi.png",
+    "Crown Armor": "https://i.imgur.com/yUYvrTq.png",
+    "Crown Helmet": "https://i.imgur.com/2PYFTyK.gif",
+    "Crown Legs": "https://i.imgur.com/2IMT5ew.gif",
+    "Crown Shield": "https://i.imgur.com/gr0Xz3d.gif",
+    "Dark Boots": "https://i.imgur.com/gq5Dxv1.png",
+    "Dark Legs": "https://i.imgur.com/J4xDtVF.png",
+    "Devil Helmet": "https://i.imgur.com/u9ijwVP.png",
+    "Dragon Hammer": "https://i.imgur.com/rTKkzwy.png",
+    "Dwarven Axe": "https://i.imgur.com/0OuZftl.png",
+    "Dwarven Shield": "https://i.imgur.com/5scwg5O.png",
+    "Guardian Shield": "https://i.imgur.com/pzkQxYt.gif",
+    "Knight Armor": "https://i.imgur.com/J6zDSRx.png",
+    "Knight Axe": "https://i.imgur.com/V1JvGh7.png",
+    "Knight Legs": "https://i.imgur.com/vSqWmL3.png",
+    "Mystic Turban": "https://i.imgur.com/1OLcL6Y.png",
+    "Noble Armor": "https://i.imgur.com/QAHaYfE.png",
+    "Paladin Armor": "https://i.imgur.com/nU8sBrK.png",
+    "Platinum Amulet": "https://i.imgur.com/pZBGzx7.gif",
+    "Red Robe": "https://i.imgur.com/iwpTesb.png",
+    "Red Tunic": "https://i.imgur.com/I724TcC.png",
+    "Silver Mace": "https://i.imgur.com/UaWPu1m.png",
+    "Spike Sword": "https://i.imgur.com/Rbx2lno.png",
+    "Strange Helmet": "https://i.imgur.com/JJqKpyo.png",
+    "Warrior Helmet": "https://i.imgur.com/kpj25Wo.gif",
+    "Beads": "https://i.imgur.com/eLblqxY.png",
+    "Holy Scroll": "https://i.imgur.com/e3E7SE9.png",
+    "Small Oil Lamp": "https://i.imgur.com/BDPsxzC.gif",
+    "Dragon Shield": "https://i.imgur.com/NdAwiQi.png",
+    "Steel Boots": "https://i.imgur.com/VG4Z5Ay.gif",
+    "Oil Lamp": "https://i.imgur.com/cnNlRzB.gif",
+    "Stone Skin Amulet": "https://i.imgur.com/Acly2ao.gif",
+    "Wedding Ring": "https://i.imgur.com/lUlTIzl.gif"
+    // Add new items manually, e.g., "Magic Sword": "https://i.imgur.com/placeholder.png"
+};
+
+// Function to update prices and add missing items
+async function updateItems() {
+    try {
+        // Fetch JSON data
+        const response = await fetch('mala_kar_items.json');
+        const data = await response.json();
+
+        // Process each tab
+        for (const tabId in data) {
+            const tabContent = document.getElementById(tabId);
+            const gridContainer = tabContent.querySelector('.grid-container');
+            const items = data[tabId];
+
+            // Track existing items
+            const existingItems = new Set(
+                Array.from(gridContainer.querySelectorAll('.item-name')).map(item => item.textContent)
+            );
+
+            // Update prices and add new items
+            items.forEach(item => {
+                const itemName = item.name;
+                const price = item.price;
+                const currency = item.currency;
+                const existingItem = gridContainer.querySelector(`.item-name[data-original-name="${itemName}"]`) ||
+                                    gridContainer.querySelector(`.item-name:not([data-original-name])[textContent="${itemName}"]`);
+
+                if (existingItem) {
+                    // Update price
+                    const tooltip = existingItem.parentElement.querySelector('.cost-tooltip');
+                    tooltip.textContent = `${price} ${currency}`;
+                } else if (!existingItems.has(itemName)) {
+                    // Add new item
+                    const imageUrl = itemImageMap[itemName] || 'https://i.imgur.com/placeholder.png';
+                    const gridItem = document.createElement('div');
+                    gridItem.className = 'grid-item';
+                    gridItem.innerHTML = `
+                        <a href="https://example.com/${itemName.toLowerCase().replace(/\s+/g, '-')}" target="_blank">
+                            <div class="item-name" data-original-name="${itemName}">${itemName}</div>
+                            <img src="${imageUrl}" alt="${itemName}">
+                            <div class="cost-tooltip">${price} ${currency}</div>
+                        </a>
+                    `;
+                    gridContainer.appendChild(gridItem);
+                    existingItems.add(itemName);
+                }
+            });
+
+            // Update tab height
+            tabContent.style.maxHeight = calculateVisibleHeight(tabContent) + 'px';
+        }
+
+        // Update widths
+        updateWidths();
+    } catch (error) {
+        console.error('Error updating items:', error);
+    }
+}
+
+// Run on page load
+window.addEventListener('load', updateItems);
     </script>
 </body>
 </html>
+
