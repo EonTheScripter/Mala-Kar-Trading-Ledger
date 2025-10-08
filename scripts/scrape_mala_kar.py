@@ -17,7 +17,7 @@ def scrape_mala_kar():
 
     soup = BeautifulSoup(response.text, 'html.parser')
     
-    # Define categories based on your HTML structure (predefined items stay in their tabs)
+    # Define categories based on your HTML structure
     categories = {
         "equipment-mana-gems": [
             "Beholder Shield", "Blue Robe", "Boots of Haste", "Bright Sword", "Crown Armor",
@@ -43,7 +43,7 @@ def scrape_mala_kar():
     # Equipment keywords for missing items
     equipment_keywords = ["Armor", "Shield", "Helmet", "Legs", "Boots", "Sword", "Axe", "Mace", "Turban", "Amulet", "Necklace", "Ring", "Hammer", "Robe", "Dagger"]
 
-    # Collect all scraped items first (to avoid duplicates)
+    # Collect all scraped items
     scraped_items = {}
     tables = soup.find_all('table')
     print(f"Found {len(tables)} tables on the page.")
@@ -52,7 +52,7 @@ def scrape_mala_kar():
         table_text = table.get_text().lower()
         print(f"Processing table {i+1}...")
         
-        # Better currency detection based on table content
+        # Currency detection
         if "demonic" in table_text:
             currency = "Demonic Mana Gems"
         elif "green" in table_text:
@@ -62,25 +62,34 @@ def scrape_mala_kar():
             currency = "Mana Gems"
         print(f"  Currency: {currency}")
         
-        rows = table.find_all('tr')[1:]  # Skip header
-        for row in rows:
-            cols = row.find_all('td')
-            if len(cols) >= 2:
-                item_name = cols[0].text.strip()
-                price_text = cols[1].text.strip()
-                # Extract numeric price (e.g., "3" from "3 Demonic Mana Gems")
-                match = re.match(r'(\d+)', price_text)
-                price_num = match.group(1) if match else price_text
-                
-                scraped_items[item_name] = {"price": price_num, "currency": currency}
-                print(f"    Added: {item_name} - {price_num} {currency}")
+        rows = table.find_all('tr')
+        if len(rows) > 1:  # Ensure there's a header and at least one data row
+            for row in rows[1:]:  # Skip header
+                cols = row.find_all('td')
+                if len(cols) >= 2:
+                    item_name = cols[0].text.strip()
+                    price_text = cols[1].text.strip()
+                    print(f"    Raw TD content: Item='{item_name}', Price='{price_text}'")
+                    
+                    if not item_name:  # Skip empty item names
+                        print("    Skipping: Empty item name")
+                        continue
+                    
+                    # Extract numeric price
+                    match = re.match(r'(\d+)', price_text)
+                    price_num = match.group(1) if match else price_text
+                    print(f"    Parsed: {item_name} - {price_num} {currency}")
+                    
+                    scraped_items[item_name] = {"price": price_num, "currency": currency}
+                else:
+                    print(f"    Skipping row: Only {len(cols)} columns found")
 
     print(f"Total unique items scraped: {len(scraped_items)}")
 
-    # Now assign to categories
+    # Assign to categories
     for item_name, item_data in scraped_items.items():
         added = False
-        # Check predefined first (stays in original tab)
+        # Check predefined first
         for category, predefined_items in categories.items():
             if item_name in predefined_items:
                 data[category].append({"name": item_name, **item_data})
@@ -88,7 +97,7 @@ def scrape_mala_kar():
                 added = True
                 break
         
-        # If not predefined, add to appropriate tab based on heuristic
+        # If not predefined, add to appropriate tab
         if not added:
             is_equipment = any(keyword in item_name for keyword in equipment_keywords)
             currency = item_data["currency"]
@@ -107,7 +116,7 @@ def scrape_mala_kar():
     except Exception as e:
         print(f"Error saving JSON: {e}")
 
-    # Touch the file to force a git change (for commit)
+    # Touch the file to force a git change
     try:
         with open('mala_kar_items.json', 'a'):
             os.utime('mala_kar_items.json', None)
