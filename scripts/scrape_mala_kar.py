@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import re
 
 def scrape_mala_kar():
     url = "https://wiki.ironco.re/index.php?title=Mala%27kar"
@@ -13,7 +14,7 @@ def scrape_mala_kar():
 
     soup = BeautifulSoup(response.text, 'html.parser')
     
-    # Define categories based on your HTML structure
+    # Define categories based on your HTML structure (predefined items stay in their tabs)
     categories = {
         "equipment-mana-gems": [
             "Beholder Shield", "Blue Robe", "Boots of Haste", "Bright Sword", "Crown Armor",
@@ -36,29 +37,53 @@ def scrape_mala_kar():
         "demonic-mana-gems": []
     }
 
-    # Find all tables
+    # Equipment keywords for missing items
+    equipment_keywords = ["Armor", "Shield", "Helmet", "Legs", "Boots", "Sword", "Axe", "Mace", "Turban", "Amulet", "Necklace", "Ring", "Hammer", "Robe", "Dagger"]
+
+    # Collect all scraped items first (to avoid duplicates)
+    scraped_items = {}
     tables = soup.find_all('table')
     for table in tables:
-        currency = "Mana Gems" if "Mana Gems" in table.text else "Demonic Mana Gems"
+        # Better currency detection
+        table_text = table.get_text()
+        if "Demonic" in table_text:
+            currency = "Demonic Mana Gems"
+        elif "Green" in table_text:
+            currency = "Mana Gems"  # Treat Green as Mana for your tabs
+        else:
+            currency = "Mana Gems"
+        
         rows = table.find_all('tr')[1:]  # Skip header
-
         for row in rows:
             cols = row.find_all('td')
             if len(cols) >= 2:
                 item_name = cols[0].text.strip()
-                price = cols[1].text.strip()
+                price_text = cols[1].text.strip()
+                # Extract numeric price
+                match = re.match(r'(\d+)', price_text)
+                price_num = match.group(1) if match else price_text
+                
+                scraped_items[item_name] = {"price": price_num, "currency": currency}
 
-                # Find which category the item belongs to
-                for category, items in categories.items():
-                    if item_name in items:
-                        data[category].append({"name": item_name, "price": price, "currency": currency})
-                    # Add missing items to the correct category based on currency
-                    elif currency == "Mana Gems" and category in ["equipment-mana-gems", "items-mana-gems"]:
-                        if item_name not in items:
-                            data[category].append({"name": item_name, "price": price, "currency": currency})
-                    elif currency == "Demonic Mana Gems" and category in ["gear-demonic-mana-gems", "demonic-mana-gems"]:
-                        if item_name not in items:
-                            data[category].append({"name": item_name, "price": price, "currency": currency})
+    # Now assign to categories
+    for item_name, item_data in scraped_items.items():
+        added = False
+        # Check predefined first
+        for category, predefined_items in categories.items():
+            if item_name in predefined_items:
+                data[category].append({"name": item_name, **item_data})
+                added = True
+                break
+        
+        # If not predefined, add to appropriate tab based on heuristic
+        if not added:
+            is_equipment = any(keyword in item_name for keyword in equipment_keywords)
+            currency = item_data["currency"]
+            if currency == "Mana Gems":
+                cat = "equipment-mana-gems" if is_equipment else "items-mana-gems"
+            else:  # Demonic
+                cat = "gear-demonic-mana-gems" if is_equipment else "demonic-mana-gems"
+            data[cat].append({"name": item_name, **item_data})
 
     # Save to JSON
     with open('mala_kar_items.json', 'w') as f:
