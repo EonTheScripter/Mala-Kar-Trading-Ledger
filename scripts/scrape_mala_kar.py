@@ -45,46 +45,54 @@ def scrape_mala_kar():
 
     # Collect all scraped items
     scraped_items = {}
-    tables = soup.find_all('table')
+    tables = soup.find_all('table', class_='wikitable')  # Target wikitable class for precision
     print(f"Found {len(tables)} tables on the page.")
 
     for i, table in enumerate(tables):
-        table_text = table.get_text().lower()
-        print(f"Processing table {i+1}...")
+        # Log raw table HTML (first 200 chars) for debugging
+        table_html = str(table)[:200]
+        print(f"Table {i+1} HTML snippet: {table_html}...")
         
         # Currency detection
+        table_text = table.get_text().lower()
         if "demonic" in table_text:
             currency = "Demonic Mana Gems"
         elif "green" in table_text:
-            currency = "Mana Gems"  # Treat Green as Mana for your tabs
+            currency = "Mana Gems"  # Treat Green as Mana
             print("  Detected Green Mana Gems table (treating as Mana Gems)")
         else:
             currency = "Mana Gems"
         print(f"  Currency: {currency}")
         
         rows = table.find_all('tr')
-        if len(rows) > 1:  # Ensure there's a header and at least one data row
-            for row in rows[1:]:  # Skip header
-                cols = row.find_all('td')
-                if len(cols) >= 2:
-                    item_name = cols[0].text.strip()
-                    price_text = cols[1].text.strip()
-                    print(f"    Raw TD content: Item='{item_name}', Price='{price_text}'")
-                    
-                    if not item_name:  # Skip empty item names
-                        print("    Skipping: Empty item name")
-                        continue
-                    
-                    # Extract numeric price
-                    match = re.match(r'(\d+)', price_text)
-                    price_num = match.group(1) if match else price_text
-                    print(f"    Parsed: {item_name} - {price_num} {currency}")
-                    
-                    scraped_items[item_name] = {"price": price_num, "currency": currency}
-                else:
-                    print(f"    Skipping row: Only {len(cols)} columns found")
+        if len(rows) <= 1:
+            print("  Skipping table: No data rows found")
+            continue
+        
+        for row in rows[1:]:  # Skip header
+            cols = row.find_all('td')
+            if len(cols) >= 2:
+                # Extract item name (handle nested tags)
+                item_name = cols[0].get_text(strip=True)
+                price_text = cols[1].get_text(strip=True)
+                print(f"    Raw TD content: Item='{item_name}', Price='{price_text}'")
+                
+                if not item_name or not price_text:
+                    print("    Skipping: Empty item name or price")
+                    continue
+                
+                # Extract numeric price
+                match = re.match(r'(\d+)', price_text)
+                price_num = match.group(1) if match else price_text
+                print(f"    Parsed: {item_name} - {price_num} {currency}")
+                
+                scraped_items[item_name] = {"price": price_num, "currency": currency}
+            else:
+                print(f"    Skipping row: Only {len(cols)} columns found")
 
     print(f"Total unique items scraped: {len(scraped_items)}")
+    if len(scraped_items) == 0:
+        print("Warning: No items scraped. Check table structure or wiki page content.")
 
     # Assign to categories
     for item_name, item_data in scraped_items.items():
