@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mala'Kar Trading List</title>
+    <style>
+    :root {
+        --primary-color: #49556e;
+        --secondary-color: #E8EFFC;
+        --background-color: #191E29;
+        --text-color: #E8EFFC;
+        --item-text-color: #5285D6;
+        --highlight-color: #2e3447;
+        --table-bg: #252a38;
+        --grid-bg-blue: #252a38;
+        --grid-bg-green: #252a38;
+        --grid-bg-yellow: #252a38;
+        --grid-bg-red: #252a38;
+        --table-header-bg: var(--primary-color);
+        --table-border: #101318;
+        --shadow-color: rgba(16, 19, 24, 0.2);
+        --font-size-base: 16px;
+        --font-size-heading: 1.6rem;
+        --font-family: 'Arial', sans-serif;
+        --spacing-unit: 10px;
+        --image-size: 32px;
+        --image-border-radius: 4px;
+        --transition-speed: 0.3s;
+        --tab-font-size: calc(var(--font-size-base) * 0.9);
+        --tab-width: 120px;
+        --tab-height: auto;
+        --grid-width: 580px;
+        --tab-active-bg: #252A38;
+        --scrollbar-offset: 0px; /* New variable to control scrollbar position */
+    }
+
+    body {
+        font-family: var(--font-family);
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        margin: 0;
+        padding: var(--spacing-unit);
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: var(--font-size-base);
+        min-height: 100vh;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h1 {
+        text-align: center;
+        color: var(--text-color);
+        font-size: calc(var(--font-size-heading) * 1.5);
+        margin-bottom: calc(var(--spacing-unit) * -1.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .header-img-before {
+        margin-right: 8px;
+    }
+
+    .header-img-after {
+        margin-left: 8px;
+    }
+
+    .tabs {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: var(--grid-width);
+        margin: calc(var(--spacing-unit) * 1) auto;
+        position: relative;
+    }
+
+    .tab-container {
+        display: flex;
+        flex-wrap: nowrap;
+        width: var(--grid-width);
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0;
+        box-sizing: border-box;
+    }
+
+    .tab {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: calc(var(--spacing-unit) * 0.45);
+        background-color: var(--table-header-bg);
+        color: var(--text-color);
+        cursor: pointer;
+        border: 0.5px solid var(--table-border);
+        border-bottom: none;
+        border-radius: var(--image-border-radius) var(--image-border-radius) 0 0;
+        transition: background-color var(--transition-speed) ease, text-shadow var(--transition-speed) ease;
+        font-size: var(--tab-font-size);
+        font-weight: bold;
+        box-sizing: border-box;
+        width: var(--tab-width);
+        height: var(--tab-height);
+        flex: 0 0 auto;
+    }
+
+    .tab span {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tab .gems {
+        margin-left: 4px;
+    }
+
+        .tab-container .tab:nth-child(1):hover span {
+        text-shadow: 0 0 5px #5285D6;
+    }
+
+    .tab-container .tab:nth-child(2):hover span {
+        text-shadow: 0 0 5px #81C784;
+    }
+
+    .tab-container .tab:nth-child(3):hover span {
+        text-shadow: 0 0 5px #FFD54F;
+    }
+
+    .tab-container .tab:nth-child(4):hover span {
+        text-shadow: 0 0 5px #FF2B2B;
+    }
+
+    .tab:hover {
+        background-color: var(--tab-active-bg);
+    }
+
+    .tab.active {
+        background-color: var(--tab-active-bg);
+        color: var(--text-color);
+        border-bottom: none;
+    }
+
+    .search-container {
+        width: var(--grid-width);
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: calc(var(--spacing-unit) * 0.6);
+        background-color: var(--table-header-bg);
+        border: 0.1px solid var(--table-border);
+        border-radius: var(--image-border-radius);
+        font-size: var(--tab-font-size);
+        color: var(--text-color);
+        font-family: var(--font-family);
+        box-sizing: border-box;
+    }
+
+    .search-input::placeholder {
+        color: var(--text-color);
+        opacity: 0.7;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--item-text-color);
+    }
+
+    .grid-container {
+        width: var(--grid-width);
+        min-width: var(--grid-width);
+        margin: 0 auto;
+        background-color: var(--table-bg);
+        padding: var(--spacing-unit);
+        border-radius: var(--image-border-radius);
+        box-shadow: 0 2px 5px var(--shadow-color);
+        border: 0.1px solid var(--table-border);
+        box-sizing: border-box;
+        position: relative;
+    }
+
+    #items-blue-gems .grid-container {
+        background-color: var(--grid-bg-blue);
+    }
+
+    #items-green-gems .grid-container {
+        background-color: var(--grid-bg-green);
+    }
+
+    #items-yellow-gems .grid-container {
+        background-color: var(--grid-bg-yellow);
+    }
+
+    #items-red-gems .grid-container {
+        background-color: var(--grid-bg-red);
+    }
+
+    .grid-items {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-unit);
+        width: 100%;
+        box-sizing: border-box;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scroll-snap-type: y mandatory;
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) var(--table-border);
+    }
+
+    .grid-items::-webkit-scrollbar {
+        width: 6px;
+        transform: translateX(var(--scrollbar-offset)); /* Move scrollbar horizontally */
+    }
+
+    .grid-items::-webkit-scrollbar-track {
+        background: var(--table-border);
+        border-radius: var(--image-border-radius);
+    }
+
+    .grid-items::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: var(--image-border-radius);
+    }
+
+    .grid-items::-webkit-scrollbar-thumb:hover {
+        background: var(--highlight-color);
+    }
+
+    .grid-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        border: 0.5px solid var(--table-border);
+        border-radius: var(--image-border-radius);
+        padding: calc(var(--spacing-unit) * 0);
+        box-sizing: border-box;
+        scroll-snap-align: start;
+    }
+
+    .grid-item a {
+        text-decoration: none;
+        color: var(--item-text-color);
+        width: 100%;
+    }
+
+    .grid-item img {
+        width: var(--image-size);
+        height: var(--image-size);
+        border-radius: var(--image-border-radius);
+        transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+    }
+
+    #items-blue-gems .grid-item img:hover {
+        transform: scale(1);
+        box-shadow: 0 0 10px #5285D6;
+    }
+
+    #items-green-gems .grid-item img:hover {
+        transform: scale(1);
+        box-shadow: 0 0 10px #81C784;
+    }
+
+    #items-yellow-gems .grid-item img:hover {
+        transform: scale(1);
+        box-shadow: 0 0 10px #FFD54F;
+    }
+
+    #items-red-gems .grid-item img:hover {
+        transform: scale(1);
+        box-shadow: 0 0 10px #FF2428;
+    }
+
+    .item-name {
+        font-size: calc(var(--font-size-base) * 0.9);
+        color: var(--item-text-color);
+        font-weight: bold;
+        margin-bottom: calc(var(--spacing-unit) * 0.5);
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .cost-tooltip {
+        position: absolute;
+        bottom: calc(var(--image-size) + 10px);
+        background-color: var(--table-header-bg);
+        color: var(--text-color);
+        padding: calc(var(--spacing-unit) * 0.4);
+        border-radius: var(--image-border-radius);
+        font-size: calc(var(--font-size-base) * 0.8);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease;
+        white-space: nowrap;
+        z-index: 10;
+    }
+
+    .grid-item:hover .cost-tooltip {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .tab-content {
+        display: none;
+        overflow: hidden;
+        transition: max-height var(--transition-speed) ease-out;
+        width: var(--grid-width);
+        margin: 0 auto;
+        box-sizing: border-box;
+        min-height: 20px; /* Minimal height for empty tabs */
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .footer-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: var(--spacing-unit);
+    }
+
+    .back-link {
+        font-weight: bold;
+        font-size: calc(var(--font-size-base) * 1.1);
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: color var(--transition-speed);
+    }
+
+    @media (max-width: 768px) {
+        :root {
+            --grid-width: 360px;
+        }
+
+        .tabs {
+            width: var(--grid-width);
+        }
+
+        .tab-container {
+            flex-wrap: wrap;
+            justify-content: center;
+            width: var(--grid-width);
+        }
+
+        .tab {
+            flex-grow: 1;
+            width: auto;
+            border-bottom: 1px solid var(--table-border);
+        }
+
+        .search-container {
+            width: var(--grid-width);
+        }
+
+        .grid-container {
+            width: var(--grid-width);
+            min-width: var(--grid-width);
+        }
+
+        .grid-items {
+            grid-template-columns: repeat(2, 1fr);
+            width: 100%;
+        }
+
+        .tab-content {
+            width: var(--grid-width);
+            min-height: 20px;
+        }
+
+        .footer-container {
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-unit);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .grid-items {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .item-name {
+            font-size: calc(var(--font-size-base) * 0.8);
+        }
+
+        .grid-item img {
+            width: var(--image-size);
+            height: var(--image-size);
+        }
+
+        .cost-tooltip {
+            font-size: calc(var(--font-size-base) * 0.7);
+        }
+
+        .tab {
+            font-size: calc(var(--font-size-base) * 0.8);
+        }
+
+        .search-input {
+            font-size: calc(var(--font-size-base) * 0.8);
+        }
+    }
+    </style>
+</head>
+<body>
+    <h1>
+        <img src="https://i.imgur.com/GVLFRm6.gif" alt="Mala'kars Icon" class="header-img-before">
+        <b>Mala'kars trading ledger</b>
+        <img src="https://i.imgur.com/gcbUqpl.gif" alt="Ledger Icon" class="header-img-after">
+    </h1>
+
+<div class="tabs">
+        <div class="tab-container">
+            <div class="tab active" data-tab="items-blue-gems"><span>Items For&nbsp;<font color="#5285D6">Gems</font></span></div>
+            <div class="tab" data-tab="items-green-gems"><span>Items for&nbsp;<font color="#81C784">Gems</font></span></div>
+            <div class="tab" data-tab="items-yellow-gems"><span>Items for&nbsp;<font color="#FFD54F">Gems</font></span></div>
+            <div class="tab" data-tab="items-red-gems"><span>Items for&nbsp;<font color="#D94C4C">Gems</font></span></div>
+        </div>
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search items...">
+        </div>
+        <div class="tab-content active" id="items-blue-gems">
+            <div class="grid-container">
+                <div class="grid-items">
+                    <div class="grid-item">
+                        <a href="https://example.com/beads" target="_blank">
+                            <div class="item-name">Beads</div>
+                            <img src="https://wiki.ironco.re/images/3/33/Beads.gif" alt="Beads">
+                            <div class="cost-tooltip">1 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/blue-robe" target="_blank">
+                            <div class="item-name">Blue Robe</div>
+                            <img src="https://i.imgur.com/lugBdm0.gif" alt="Blue Robe">
+                            <div class="cost-tooltip">5 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/boots-of-haste" target="_blank">
+                            <div class="item-name">Boots of Haste</div>
+                            <img src="https://i.imgur.com/aNyF0Xn.png" alt="Boots of Haste">
+                            <div class="cost-tooltip">10 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/bright-sword" target="_blank">
+                            <div class="item-name">Bright Sword</div>
+                            <img src="https://i.imgur.com/QIYi3mi.png" alt="Bright Sword">
+                            <div class="cost-tooltip">8 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/crown-helmet" target="_blank">
+                            <div class="item-name">Crown Helmet</div>
+                            <img src="https://i.imgur.com/2PYFTyK.gif" alt="Crown Helmet">
+                            <div class="cost-tooltip">15 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/crown-legs" target="_blank">
+                            <div class="item-name">Crown Legs</div>
+                            <img src="https://i.imgur.com/2IMT5ew.gif" alt="Crown Legs">
+                            <div class="cost-tooltip">25 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/crown-shield" target="_blank">
+                            <div class="item-name">Crown Shield</div>
+                            <img src="https://i.imgur.com/gr0Xz3d.gif" alt="Crown Shield">
+                            <div class="cost-tooltip">20 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/dark-boots" target="_blank">
+                            <div class="item-name">Dark Boots</div>
+                            <img src="https://i.imgur.com/gq5Dxv1.png" alt="Dark Boots">
+                            <div class="cost-tooltip">7 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/dark-legs" target="_blank">
+                            <div class="item-name">Dark Legs</div>
+                            <img src="https://wiki.ironco.re/images/f/fb/DarkLegs.png" alt="Dark Legs">
+                            <div class="cost-tooltip">2 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/devil-helmet" target="_blank">
+                            <div class="item-name">Devil Helmet</div>
+                            <img src="https://i.imgur.com/u9ijwVP.png" alt="Devil Helmet">
+                            <div class="cost-tooltip">8 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/dragon-hammer" target="_blank">
+                            <div class="item-name">Dragon Hammer</div>
+                            <img src="https://i.imgur.com/rTKkzwy.png" alt="Dragon Hammer">
+                            <div class="cost-tooltip">2 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/dwarven-axe" target="_blank">
+                            <div class="item-name">Dwarven Axe</div>
+                            <img src="https://i.imgur.com/0OuZftl.png" alt="Dwarven Axe">
+                            <div class="cost-tooltip">9 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/dwarven-shield" target="_blank">
+                            <div class="item-name">Dwarven Shield</div>
+                            <img src="https://i.imgur.com/5scwg5O.png" alt="Dwarven Shield">
+                            <div class="cost-tooltip">2 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/guardian-shield" target="_blank">
+                            <div class="item-name">Guardian Shield</div>
+                            <img src="https://i.imgur.com/pzkQxYt.gif" alt="Guardian Shield">
+                            <div class="cost-tooltip">12 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/holy-scroll" target="_blank">
+                            <div class="item-name">Holy Scroll</div>
+                            <img src="https://wiki.ironco.re/images/3/34/HolyScroll.png" alt="Holy Scroll">
+                            <div class="cost-tooltip">2 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/knight-armor" target="_blank">
+                            <div class="item-name">Knight Armor</div>
+                            <img src="https://i.imgur.com/J6zDSRx.png" alt="Knight Armor">
+                            <div class="cost-tooltip">15 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/knight-axe" target="_blank">
+                            <div class="item-name">Knight Axe</div>
+                            <img src="https://i.imgur.com/V1JvGh7.png" alt="Knight Axe">
+                            <div class="cost-tooltip">3 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/knight-legs" target="_blank">
+                            <div class="item-name">Knight Legs</div>
+                            <img src="https://i.imgur.com/vSqWmL3.png" alt="Knight Legs">
+                            <div class="cost-tooltip">15 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/mystic-turban" target="_blank">
+                            <div class="item-name">Mystic Turban</div>
+                            <img src="https://i.imgur.com/1OLcL6Y.png" alt="Mystic Turban">
+                            <div class="cost-tooltip">2 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/noble-armor" target="_blank">
+                            <div class="item-name">Noble Armor</div>
+                            <img src="https://i.imgur.com/QAHaYfE.png" alt="Noble Armor">
+                            <div class="cost-tooltip">5 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/paladin-armor" target="_blank">
+                            <div class="item-name">Paladin Armor</div>
+                            <img src="https://wiki.ironco.re/images/5/5f/PaladinArmor.png" alt="Paladin Armor">
+                            <div class="cost-tooltip">20 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/platinum-amulet" target="_blank">
+                            <div class="item-name">Platinum Amulet</div>
+                            <img src="https://i.imgur.com/pZBGzx7.gif" alt="Platinum Amulet">
+                            <div class="cost-tooltip">4 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/red-robe" target="_blank">
+                            <div class="item-name">Red Robe</div>
+                            <img src="https://i.imgur.com/iwpTesb.png" alt="Red Robe">
+                            <div class="cost-tooltip">5 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/red-tunic" target="_blank">
+                            <div class="item-name">Red Tunic</div>
+                            <img src="https://i.imgur.com/I724TcC.png" alt="Red Tunic">
+                            <div class="cost-tooltip">6 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/silver-mace" target="_blank">
+                            <div class="item-name">Silver Mace</div>
+                            <img src="https://i.imgur.com/UaWPu1m.png" alt="Silver Mace">
+                            <div class="cost-tooltip">10 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/small-oil-lamp" target="_blank">
+                            <div class="item-name">Small Oil Lamp</div>
+                            <img src="https://i.imgur.com/BDPsxzC.gif" alt="Small Oil Lamp">
+                            <div class="cost-tooltip">5 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/spike-sword" target="_blank">
+                            <div class="item-name">Spike Sword</div>
+                            <img src="https://i.imgur.com/Rbx2lno.png" alt="Spike Sword">
+                            <div class="cost-tooltip">3 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/strange-helmet" target="_blank">
+                            <div class="item-name">Strange Helmet</div>
+                            <img src="https://i.imgur.com/JJqKpyo.png" alt="Strange Helmet">
+                            <div class="cost-tooltip">6 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/warrior-helmet" target="_blank">
+                            <div class="item-name">Warrior Helmet</div>
+                            <img src="https://i.imgur.com/kpj25Wo.gif" alt="Warrior Helmet">
+                            <div class="cost-tooltip">10 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/silver-dagger" target="_blank">
+                            <div class="item-name">Silver Dagger</div>
+                            <img src="https://i.imgur.com/placeholder.png" alt="Silver Dagger">
+                            <div class="cost-tooltip">5 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/crystal-necklace" target="_blank">
+                            <div class="item-name">Crystal Necklace</div>
+                            <img src="https://i.imgur.com/placeholder.png" alt="Crystal Necklace">
+                            <div class="cost-tooltip">5 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/crystal-ring" target="_blank">
+                            <div class="item-name">Crystal Ring</div>
+                            <img src="https://i.imgur.com/placeholder.png" alt="Crystal Ring">
+                            <div class="cost-tooltip">5 <font color="#5285D6">Blue Gems</font></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="items-green-gems">
+            <div class="grid-container">
+                <div class="grid-items">
+                    <div class="grid-item">
+                        <a href="https://example.com/beholder-shield" target="_blank">
+                            <div class="item-name">Beholder Shield</div>
+                            <img src="https://i.imgur.com/pOpXi9a.png" alt="Beholder Shield">
+                            <div class="cost-tooltip">15 <font color="#81C784">Green Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/bottle-of-whiskey" target="_blank">
+                            <div class="item-name">Bottle of Whiskey</div>
+                            <img src="https://wiki.ironco.re/images/0/0c/BottleOfWhisky.gif" alt="Bottle of Whiskey">
+                            <div class="cost-tooltip">5 <font color="#81C784">Green Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="???" target="_blank">
+                            <div class="item-name">???</div>
+                            <img src="???" alt="">
+                            <div class="cost-tooltip">? <font color="#81C784">Blue Gems</font>Mana Gems</div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="???" target="_blank">
+                            <div class="item-name">???</div>
+                            <img src="???" alt="">
+                            <div class="cost-tooltip">? <font color="#81C784">Blue Gems</font>Mana Gems</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="items-yellow-gems">
+            <div class="grid-container">
+                <div class="grid-items">
+                    <div class="grid-item">
+                        <a href="???" target="_blank">
+                            <div class="item-name">???</div>
+                            <img src="???" alt="">
+                            <div class="cost-tooltip">? <font color="#FFD54F">Yellow Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="???" target="_blank">
+                            <div class="item-name">???</div>
+                            <img src="???" alt="">
+                            <div class="cost-tooltip">? <font color="#FFD54F">Yellow Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="???" target="_blank">
+                            <div class="item-name">???</div>
+                            <img src="???" alt="">
+                            <div class="cost-tooltip">? <font color="#FFD54F">Yellow Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="???" target="_blank">
+                            <div class="item-name">???</div>
+                            <img src="???" alt="">
+                            <div class="cost-tooltip">? <font color="#FFD54F">Yellow Gems</font></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="items-red-gems">
+            <div class="grid-container">
+                <div class="grid-items">
+                    <div class="grid-item">
+                        <a href="https://example.com/dragon-shield" target="_blank">
+                            <div class="item-name">Dragon Shield</div>
+                            <img src="https://i.imgur.com/NdAwiQi.png" alt="Dragon Shield">
+                            <div class="cost-tooltip">3 <font color="#D94C4C">Red Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/oil-lamp" target="_blank">
+                            <div class="item-name">Oil Lamp</div>
+                            <img src="https://i.imgur.com/cnNlRzB.gif" alt="Oil Lamp">
+                            <div class="cost-tooltip">2 <font color="#D94C4C">Red Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/steel-boots" target="_blank">
+                            <div class="item-name">Steel Boots</div>
+                            <img src="https://i.imgur.com/VG4Z5Ay.gif" alt="Steel Boots">
+                            <div class="cost-tooltip">5 <font color="#D94C4C">Red Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/stone-skin-amulet" target="_blank">
+                            <div class="item-name">Stone Skin Amulet</div>
+                            <img src="https://i.imgur.com/Acly2ao.gif" alt="Stone Skin Amulet">
+                            <div class="cost-tooltip">1 <font color="#D94C4C">Red Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/wedding-ring" target="_blank">
+                            <div class="item-name">Wedding Ring</div>
+                            <img src="https://i.imgur.com/lUlTIzl.gif" alt="Wedding Ring">
+                            <div class="cost-tooltip">1 <font color="#D94C4C">Red Gems</font></div>
+                        </a>
+                    </div>
+                    <div class="grid-item">
+                        <a href="https://example.com/crown-armor" target="_blank">
+                            <div class="item-name">Crown Armor</div>
+                            <img src="https://i.imgur.com/yUYvrTq.png" alt="Crown Armor">
+                            <div class="cost-tooltip">5 <font color="#D94C4C">Red Gems</font></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="credit">
+        <center>Credit<br>
+        Thanks to <strong><font color="#5285D6">ResTTe</font></strong>, <strong><font color="#5285D6">Drake</font></strong> and <strong><font color="#5285D6">Kubik Betona</font></strong> for checking prices.</center>
+    </div>
+    <div class="footer-container">
+        <p><a href="https://wiki.ironco.re/index.php?title=NPCs" class="back-link">Back to NPCs</a></p>
+    </div>
+
+    <script>
+        // Calculate dynamic height based on number of items, up to 6 rows
+        function calculateDynamicHeight(activeTab) {
+            const gridContainer = activeTab.querySelector('.grid-container');
+            const gridItems = activeTab.querySelector('.grid-items');
+            const items = activeTab.querySelectorAll('.grid-item');
+            const visibleItems = Array.from(items).filter(item => item.style.display !== 'none');
+            const columns = window.innerWidth > 768 ? 4 : 2;
+            const itemHeight = items.length > 0 ? items[0].offsetHeight : 0;
+            const gap = parseInt(getComputedStyle(gridItems).gap) || 0;
+            const padding = parseInt(getComputedStyle(gridContainer).padding) * 2;
+
+            // Calculate number of rows, including partial rows
+            const rows = visibleItems.length > 0 ? Math.ceil(visibleItems.length / columns) : 0;
+            // Cap at 6 rows
+            const cappedRows = Math.min(rows, 6);
+            // Calculate height: rows * (item height + gap) + padding
+            const calculatedHeight = visibleItems.length > 0 ? (cappedRows * (itemHeight + gap) - gap + padding) : padding;
+
+            // Apply height to grid container
+            gridContainer.style.height = `${calculatedHeight}px`;
+            gridContainer.style.minHeight = `${calculatedHeight}px`;
+
+            // Toggle scrollbar based on whether rows exceed 6
+            gridItems.style.overflowY = rows > 6 ? 'auto' : 'hidden';
+            // Set max-height for grid-items to enable scrolling when needed
+            gridItems.style.maxHeight = visibleItems.length > 0 ? `${cappedRows * (itemHeight + gap) - gap + padding}px` : `${padding}px`;
+
+            return calculatedHeight;
+        }
+
+        // Sort items alphabetically in a grid container
+        function sortGridItems(gridItemsContainer) {
+            const gridItems = Array.from(gridItemsContainer.querySelectorAll('.grid-item'));
+            gridItems.sort((a, b) => {
+                const nameA = a.querySelector('.item-name').textContent.toLowerCase();
+                const nameB = b.querySelector('.item-name').textContent.toLowerCase();
+                return nameA.localeCompare(nameB);
+            });
+            gridItemsContainer.innerHTML = '';
+            gridItems.forEach(item => gridItemsContainer.appendChild(item));
+        }
+
+        // Initialize sorting for all tabs on page load
+        function initializeSorting() {
+            document.querySelectorAll('.tab-content').forEach(tabContent => {
+                const gridItemsContainer = tabContent.querySelector('.grid-items');
+                if (gridItemsContainer) {
+                    sortGridItems(gridItemsContainer);
+                    if (tabContent.classList.contains('active')) {
+                        tabContent.style.maxHeight = calculateDynamicHeight(tabContent) + 'px';
+                    }
+                }
+            });
+        }
+
+        // Tab Switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => {
+                    c.classList.remove('active');
+                    c.style.maxHeight = '0px';
+                });
+
+                tab.classList.add('active');
+                const tabContent = document.getElementById(tab.dataset.tab);
+                if (tabContent) {
+                    tabContent.classList.add('active');
+                    tabContent.style.maxHeight = calculateDynamicHeight(tabContent) + 'px';
+                    const searchInput = document.querySelector('.search-input');
+                    searchInput.value = '';
+                    const items = tabContent.querySelectorAll('.grid-item');
+                    items.forEach(item => item.style.display = '');
+                    tabContent.style.maxHeight = calculateDynamicHeight(tabContent) + 'px';
+                    window.scrollTo(0, window.scrollY); // Lock horizontal scroll
+                }
+            });
+        });
+
+        // Search Functionality
+        document.querySelector('.search-input').addEventListener('input', e => {
+            const searchTerm = e.target.value.toLowerCase();
+            const activeTab = document.querySelector('.tab-content.active');
+            const items = Array.from(activeTab.querySelectorAll('.grid-item'));
+
+            // Filter items that start with the search term
+            const visibleItems = items.filter(item => {
+                const itemName = item.querySelector('.item-name').textContent.toLowerCase();
+                return itemName.startsWith(searchTerm);
+            });
+
+            // Sort items alphabetically
+            visibleItems.sort((a, b) => {
+                const nameA = a.querySelector('.item-name').textContent.toLowerCase();
+                const nameB = b.querySelector('.item-name').textContent.toLowerCase();
+                return nameA.localeCompare(nameB);
+            });
+
+            // Hide all items first
+            items.forEach(item => item.style.display = 'none');
+
+            // Show and reorder visible items
+            const gridItemsContainer = activeTab.querySelector('.grid-items');
+            visibleItems.forEach(item => {
+                item.style.display = '';
+                gridItemsContainer.appendChild(item);
+            });
+
+            // Update height
+            activeTab.style.maxHeight = calculateDynamicHeight(activeTab) + 'px';
+        });
+
+        // Initial height adjustment and sorting
+        window.addEventListener('load', () => {
+            initializeSorting();
+            const activeTab = document.querySelector('.tab-content.active');
+            activeTab.style.maxHeight = calculateDynamicHeight(activeTab) + 'px';
+        });
+
+        // Debounced resize event
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const activeTab = document.querySelector('.tab-content.active');
+                activeTab.style.maxHeight = calculateDynamicHeight(activeTab) + 'px';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
