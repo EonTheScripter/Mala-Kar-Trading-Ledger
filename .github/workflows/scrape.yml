@@ -24,11 +24,16 @@ jobs:
 
       - name: Run scraper
         run: python scripts/scrape_mala_kar.py
+        continue-on-error: false  # Fail the job if script errors
 
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add mala_kar_items.json
-          git commit -m "Update mala_kar_items.json with latest prices" || echo "No changes to commit"
-          git push
+          git add mala_kar_items.json || echo "No JSON file to add"
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update mala_kar_items.json with latest prices"
+            git push
+          fi
