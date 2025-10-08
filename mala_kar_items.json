@@ -2,11 +2,5 @@
     "equipment-mana-gems": [],
     "items-mana-gems": [],
     "gear-demonic-mana-gems": [],
-    "demonic-mana-gems": [
-        {
-            "name": "",
-            "price": "Wedding Ring",
-            "currency": "Demonic Mana Gems"
-        }
-    ]
+    "demonic-mana-gems": []
 }
