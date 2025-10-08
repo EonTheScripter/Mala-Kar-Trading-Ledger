@@ -1025,7 +1025,7 @@
             updateWidths();
         });
 
-        // Item-to-image mapping (update manually for new items)
+// Item-to-image mapping (update manually for new items)
 const itemImageMap = {
     "Beholder Shield": "https://i.imgur.com/pOpXi9a.png",
     "Blue Robe": "https://i.imgur.com/lugBdm0.gif",
@@ -1063,42 +1063,60 @@ const itemImageMap = {
     "Oil Lamp": "https://i.imgur.com/cnNlRzB.gif",
     "Stone Skin Amulet": "https://i.imgur.com/Acly2ao.gif",
     "Wedding Ring": "https://i.imgur.com/lUlTIzl.gif"
-    // Add new items manually, e.g., "Magic Sword": "https://i.imgur.com/placeholder.png"
+    // Add new items manually, e.g., "Crystal Necklace": "https://i.imgur.com/new-image.png"
 };
 
-// Function to update prices and add missing items
+// Function to update prices and add missing items (fixed selector and logic)
 async function updateItems() {
     try {
         // Fetch JSON data
         const response = await fetch('mala_kar_items.json');
+        if (!response.ok) {
+            console.error('Failed to fetch JSON');
+            return;
+        }
         const data = await response.json();
 
         // Process each tab
         for (const tabId in data) {
             const tabContent = document.getElementById(tabId);
+            if (!tabContent) continue;
             const gridContainer = tabContent.querySelector('.grid-container');
+            if (!gridContainer) continue;
             const items = data[tabId];
 
-            // Track existing items
-            const existingItems = new Set(
-                Array.from(gridContainer.querySelectorAll('.item-name')).map(item => item.textContent)
-            );
+            // Track existing items by name
+            const existingItems = new Set();
+            const allItemNames = gridContainer.querySelectorAll('.item-name');
+            allItemNames.forEach(nameEl => {
+                existingItems.add(nameEl.textContent.trim());
+            });
 
             // Update prices and add new items
             items.forEach(item => {
                 const itemName = item.name;
                 const price = item.price;
                 const currency = item.currency;
-                const existingItem = gridContainer.querySelector(`.item-name[data-original-name="${itemName}"]`) ||
-                                    gridContainer.querySelector(`.item-name:not([data-original-name])[textContent="${itemName}"]`);
+
+                // Find existing item by text content (fixed: loop instead of invalid selector)
+                let existingItem = null;
+                for (let nameEl of allItemNames) {
+                    if (nameEl.textContent.trim() === itemName) {
+                        existingItem = nameEl;
+                        break;
+                    }
+                }
 
                 if (existingItem) {
                     // Update price
-                    const tooltip = existingItem.parentElement.querySelector('.cost-tooltip');
-                    tooltip.textContent = `${price} ${currency}`;
+                    const gridItem = existingItem.closest('.grid-item');
+                    const tooltip = gridItem ? gridItem.querySelector('.cost-tooltip') : null;
+                    if (tooltip) {
+                        tooltip.textContent = `${price} ${currency}`;
+                    }
                 } else if (!existingItems.has(itemName)) {
                     // Add new item
-                    const imageUrl = itemImageMap[itemName] || 'https://i.imgur.com/placeholder.png';
+                    const imageUrl = itemImageMap[itemName] || 'https://i.imgur.com/placeholder.png';  // Placeholder until manual update
                     const gridItem = document.createElement('div');
                     gridItem.className = 'grid-item';
                     gridItem.innerHTML = `
@@ -1110,15 +1128,21 @@ async function updateItems() {
                     `;
                     gridContainer.appendChild(gridItem);
                     existingItems.add(itemName);
+                    // Refresh allItemNames after add (simple re-query)
+                    allItemNames = gridContainer.querySelectorAll('.item-name');  // Update reference
                 }
             });
 
             // Update tab height
-            tabContent.style.maxHeight = calculateVisibleHeight(tabContent) + 'px';
+            if (typeof calculateVisibleHeight === 'function') {
+                tabContent.style.maxHeight = calculateVisibleHeight(tabContent) + 'px';
+            }
         }
 
         // Update widths
-        updateWidths();
+        if (typeof updateWidths === 'function') {
+            updateWidths();
+        }
     } catch (error) {
         console.error('Error updating items:', error);
     }
@@ -1129,4 +1153,5 @@ window.addEventListener('load', updateItems);
     </script>
 </body>
 </html>
+
 
