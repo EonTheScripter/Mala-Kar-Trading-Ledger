@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8">
+<title>Mala'Kar Gallery</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ===== FULLSCREEN HORIZONTAL GRID ONLY ===== */
+    .bg-grid {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: radial-gradient(ellipse at top, #A6ADD8 0%, #000 60%);
+        pointer-events: none;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    /* Horizontal Lines Only (2px spacing, up to 1000px+) */
+    .bg-grid::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%;
+        height: 1px;
+        background: #222;
+        box-shadow: 
+            0 2px #222, 0 4px #222, 0 6px #222, 0 8px #222, 0 10px #222,
+            0 12px #222, 0 14px #222, 0 16px #222, 0 18px #222, 0 20px #222,
+            0 22px #222, 0 24px #222, 0 26px #222, 0 28px #222, 0 30px #222,
+            0 32px #222, 0 34px #222, 0 36px #222, 0 38px #222, 0 40px #222,
+            0 42px #222, 0 44px #222, 0 46px #222, 0 48px #222, 0 50px #222,
+            0 52px #222, 0 54px #222, 0 56px #222, 0 58px #222, 0 60px #222,
+            0 62px #222, 0 64px #222, 0 66px #222, 0 68px #222, 0 70px #222,
+            0 72px #222, 0 74px #222, 0 76px #222, 0 78px #222, 0 80px #222,
+            0 82px #222, 0 84px #222, 0 86px #222, 0 88px #222, 0 90px #222,
+            0 92px #222, 0 94px #222, 0 96px #222, 0 98px #222, 0 100px #222,
+            0 102px #222, 0 104px #222, 0 106px #222, 0 108px #222, 0 110px #222,
+            0 112px #222, 0 114px #222, 0 116px #222, 0 118px #222, 0 120px #222,
+            0 122px #222, 0 124px #222, 0 126px #222, 0 128px #222, 0 130px #222,
+            0 132px #222, 0 134px #222, 0 136px #222, 0 138px #222, 0 140px #222,
+            0 142px #222, 0 144px #222, 0 146px #222, 0 148px #222, 0 150px #222,
+            0 152px #222, 0 154px #222, 0 156px #222, 0 158px #222, 0 160px #222,
+            0 162px #222, 0 164px #222, 0 166px #222, 0 168px #222, 0 170px #222,
+            0 172px #222, 0 174px #222, 0 176px #222, 0 178px #222, 0 180px #222,
+            0 182px #222, 0 184px #222, 0 186px #222, 0 188px #222, 0 190px #222,
+            0 192px #222, 0 194px #222, 0 196px #222, 0 198px #222, 0 200px #222,
+            0 202px #222, 0 204px #222, 0 206px #222, 0 208px #222, 0 210px #222,
+            0 212px #222, 0 214px #222, 0 216px #222, 0 218px #222, 0 220px #222,
+            0 222px #222, 0 224px #222, 0 226px #222, 0 228px #222, 0 230px #222,
+            0 232px #222, 0 234px #222, 0 236px #222, 0 238px #222, 0 240px #222,
+            0 242px #222, 0 244px #222, 0 246px #222, 0 248px #222, 0 250px #222,
+            0 252px #222, 0 254px #222, 0 256px #222, 0 258px #222, 0 260px #222,
+            0 262px #222, 0 264px #222, 0 266px #222, 0 268px #222, 0 270px #222,
+            0 272px #222, 0 274px #222, 0 276px #222, 0 278px #222, 0 280px #222,
+            0 282px #222, 0 284px #222, 0 286px #222, 0 288px #222, 0 290px #222,
+            0 292px #222, 0 294px #222, 0 296px #222, 0 298px #222, 0 300px #222,
+            0 302px #222, 0 304px #222, 0 306px #222, 0 308px #222, 0 310px #222,
+            0 312px #222, 0 314px #222, 0 316px #222, 0 318px #222, 0 320px #222,
+            0 322px #222, 0 324px #222, 0 326px #222, 0 328px #222, 0 330px #222,
+            0 332px #222, 0 334px #222, 0 336px #222, 0 338px #222, 0 340px #222,
+            0 342px #222, 0 344px #222, 0 346px #222, 0 348px #222, 0 350px #222,
+            0 352px #222, 0 354px #222, 0 356px #222, 0 358px #222, 0 360px #222,
+            0 362px #222, 0 364px #222, 0 366px #222, 0 368px #222, 0 370px #222,
+            0 372px #222, 0 374px #222, 0 376px #222, 0 378px #222, 0 380px #222,
+            0 382px #222, 0 384px #222, 0 386px #222, 0 388px #222, 0 390px #222,
+            0 392px #222, 0 394px #222, 0 396px #222, 0 398px #222, 0 400px #222,
+            0 402px #222, 0 404px #222, 0 406px #222, 0 408px #222, 0 410px #222,
+            0 412px #222, 0 414px #222, 0 416px #222, 0 418px #222, 0 420px #222,
+            0 422px #222, 0 424px #222, 0 426px #222, 0 428px #222, 0 430px #222,
+            0 432px #222, 0 434px #222, 0 436px #222, 0 438px #222, 0 440px #222,
+            0 442px #222, 0 444px #222, 0 446px #222, 0 448px #222, 0 450px #222,
+            0 452px #222, 0 454px #222, 0 456px #222, 0 458px #222, 0 460px #222,
+            0 462px #222, 0 464px #222, 0 466px #222, 0 468px #222, 0 470px #222,
+            0 472px #222, 0 474px #222, 0 476px #222, 0 478px #222, 0 480px #222,
+            0 482px #222, 0 484px #222, 0 486px #222, 0 488px #222, 0 490px #222,
+            0 492px #222, 0 494px #222, 0 496px #222, 0 498px #222, 0 500px #222,
+            0 502px #222, 0 504px #222, 0 506px #222, 0 508px #222, 0 510px #222,
+            0 512px #222, 0 514px #222, 0 516px #222, 0 518px #222, 0 520px #222,
+            0 522px #222, 0 524px #222, 0 526px #222, 0 528px #222, 0 530px #222,
+            0 532px #222, 0 534px #222, 0 536px #222, 0 538px #222, 0 540px #222,
+            0 542px #222, 0 544px #222, 0 546px #222, 0 548px #222, 0 550px #222,
+            0 552px #222, 0 554px #222, 0 556px #222, 0 558px #222, 0 560px #222,
+            0 562px #222, 0 564px #222, 0 566px #222, 0 568px #222, 0 570px #222,
+            0 572px #222, 0 574px #222, 0 576px #222, 0 578px #222, 0 580px #222,
+            0 582px #222, 0 584px #222, 0 586px #222, 0 588px #222, 0 590px #222,
+            0 592px #222, 0 594px #222, 0 596px #222, 0 598px #222, 0 600px #222,
+            0 602px #222, 0 604px #222, 0 606px #222, 0 608px #222, 0 610px #222,
+            0 612px #222, 0 614px #222, 0 616px #222, 0 618px #222, 0 620px #222,
+            0 622px #222, 0 624px #222, 0 626px #222, 0 628px #222, 0 630px #222,
+            0 632px #222, 0 634px #222, 0 636px #222, 0 638px #222, 0 640px #222,
+            0 642px #222, 0 644px #222, 0 646px #222, 0 648px #222, 0 650px #222,
+            0 652px #222, 0 654px #222, 0 656px #222, 0 658px #222, 0 660px #222,
+            0 662px #222, 0 664px #222, 0 666px #222, 0 668px #222, 0 670px #222,
+            0 672px #222, 0 674px #222, 0 676px #222, 0 678px #222, 0 680px #222,
+            0 682px #222, 0 684px #222, 0 686px #222, 0 688px #222, 0 690px #222,
+            0 692px #222, 0 694px #222, 0 696px #222, 0 698px #222, 0 700px #222,
+            0 702px #222, 0 704px #222, 0 706px #222, 0 708px #222, 0 710px #222,
+            0 712px #222, 0 714px #222, 0 716px #222, 0 718px #222, 0 720px #222,
+            0 722px #222, 0 724px #222, 0 726px #222, 0 728px #222, 0 730px #222,
+            0 732px #222, 0 734px #222, 0 736px #222, 0 738px #222, 0 740px #222,
+            0 742px #222, 0 744px #222, 0 746px #222, 0 748px #222, 0 750px #222,
+            0 752px #222, 0 754px #222, 0 756px #222, 0 758px #222, 0 760px #222,
+            0 762px #222, 0 764px #222, 0 766px #222, 0 768px #222, 0 770px #222,
+            0 772px #222, 0 774px #222, 0 776px #222, 0 778px #222, 0 780px #222,
+            0 782px #222, 0 784px #222, 0 786px #222, 0 788px #222, 0 790px #222,
+            0 792px #222, 0 794px #222, 0 796px #222, 0 798px #222, 0 800px #222,
+            0 802px #222, 0 804px #222, 0 806px #222, 0 808px #222, 0 810px #222,
+            0 812px #222, 0 814px #222, 0 816px #222, 0 818px #222, 0 820px #222,
+            0 822px #222, 0 824px #222, 0 826px #222, 0 828px #222, 0 830px #222,
+            0 832px #222, 0 834px #222, 0 836px #222, 0 838px #222, 0 840px #222,
+            0 842px #222, 0 844px #222, 0 846px #222, 0 848px #222, 0 850px #222,
+            0 852px #222, 0 854px #222, 0 856px #222, 0 858px #222, 0 860px #222,
+            0 862px #222, 0 864px #222, 0 866px #222, 0 868px #222, 0 870px #222,
+            0 872px #222, 0 874px #222, 0 876px #222, 0 878px #222, 0 880px #222,
+            0 882px #222, 0 884px #222, 0 886px #222, 0 888px #222, 0 890px #222,
+            0 892px #222, 0 894px #222, 0 896px #222, 0 898px #222, 0 900px #222,
+            0 902px #222, 0 904px #222, 0 906px #222, 0 908px #222, 0 910px #222,
+            0 912px #222, 0 914px #222, 0 916px #222, 0 918px #222, 0 920px #222,
+            0 922px #222, 0 924px #222, 0 926px #222, 0 928px #222, 0 930px #222,
+            0 932px #222, 0 934px #222, 0 936px #222, 0 938px #222, 0 940px #222,
+            0 942px #222, 0 944px #222, 0 946px #222, 0 948px #222, 0 950px #222,
+            0 952px #222, 0 954px #222, 0 956px #222, 0 958px #222, 0 960px #222,
+            0 962px #222, 0 964px #222, 0 966px #222, 0 968px #222, 0 970px #222,
+            0 972px #222, 0 974px #222, 0 976px #222, 0 978px #222, 0 980px #222,
+            0 982px #222, 0 984px #222, 0 986px #222, 0 988px #222, 0 990px #222,
+            0 992px #222, 0 994px #222, 0 996px #222, 0 998px #222, 0 1000px #222;
+    }
+
+    /* ===== MAIN LAYOUT ===== */
+    html, body {
+        height: 100%;
+        font-family: 'Cinzel Decorative', serif;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        margin: 0;
+        padding: 10px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .upper-group, .lower-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        width: 100%;
+        max-width: 900px;
+    }
+
+    /* ===== HEADER IMAGE WITH GLOW ===== */
+    .header-block {
+        width: 280px;
+        height: auto;
+        filter: drop-shadow(0 0 12px var(--header-glow, transparent));
+        transition: filter 0.3s ease;
+        z-index: 10;
+    }
+
+    /* ===== GALLERY WRAPPER ===== */
+    .gallery-wrapper {
+        position: relative;
+        overflow: visible;
+        width: 100vw;
+        max-width: 100%;
+        min-height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 0.8vw;
+    }
+
+    .gallery {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .item-name-block {
+        position: absolute;
+        top: 15%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 18px;
+        font-weight: bold;
+        color: #fff;
+        text-align: center;
+        min-height: 1.5em;
+        text-shadow: 0 0 10px var(--glow, transparent);
+        transition: text-shadow 0.3s ease;
+        z-index: 20;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+
+    .counter-wrapper {
+        position: absolute;
+        bottom: 15%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 20;
+    }
+
+    .counter-block {
+        font-size: 1rem;
+        font-weight: bold;
+        color: #fff;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    /* ===== MANA GEMS & SEARCH ===== */
+    .mana-gems-block {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        font-family: Tahoma, sans-serif;
+        font-weight: bold;
+        font-size: 1rem;
+        max-width: 260px;
+        width: 100%;
+    }
+
+    .gem-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0px;
+    }
+
+    .gem-cost {
+        min-width: 24px;
+        width: 24px;
+        text-align: center;
+        color: #fff;
+        opacity: 0;
+        transition: opacity 0.3s;
+        text-shadow: 0 0 6px var(--glow, transparent);
+        font-size: 0.8rem;
+    }
+
+    .gem-cost.visible { opacity: 1; }
+
+    .mana-gem {
+        width: 32px; height: 32px;
+        object-fit: contain;
+        filter: grayscale(100%) opacity(0.3);
+        transition: filter 0.3s;
+    }
+
+    .mana-gem.active { filter: none; }
+
+    .search-block {
+        width: 100%;
+        max-width: 900px;
+        display: flex;
+        justify-content: center;
+        padding: 0 20px;
+    }
+
+    #search-input {
+        --search-width: 160px;
+        width: 100%;
+        max-width: var(--search-width);
+        padding: 4px 14px;
+        border: 0;
+        border-radius: 6px;
+        background: #fff;
+        box-shadow: rgba(0,0,0,0.16) 0px 3px 6px, rgba(0,0,0,0.23) 0px 3px 6px;
+        font: inherit;
+        font-size: 0.95rem;
+        text-align: center;
+        transition: all 0.2s;
+    }
+
+    #search-input::placeholder { color: #aaa; opacity: 1; }
+    #search-input:focus, #search-input:not(:placeholder-shown) {
+        outline: none;
+        box-shadow: 0 0 6px rgba(0,0,0,.2);
+    }
+
+    /* ===== GALLERY ITEMS ===== */
+    .gallery-item {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        filter: grayscale(100%);
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .gallery-item .img-container {
+        width: var(--img-size);
+        height: var(--img-size);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .gallery-item img {
+        width: 100%; height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 0 0 transparent);
+    }
+
+    .gallery-item .name, .gallery-item .cost { display: none; }
+
+    .gallery-item.active {
+        width: 75px; height: 75px;
+        background: #ddd;
+        border: 1px solid #000;
+        border-radius: 6px;
+        filter: none;
+        z-index: 10;
+        padding: 6px 10px;
+        box-shadow: rgba(0,0,0,0.16) 0px 3px 6px, rgba(0,0,0,0.23) 0px 3px 6px;
+        left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+        gap: 4px;
+        opacity: 1;
+    }
+
+    .gallery-item.active .img-container { --img-size: 32px; }
+    .gallery-item.active img { filter: drop-shadow(0 0 8px var(--glow)); }
+
+    .gallery-item.adjacent, .gallery-item.far {
+        background: none; border: none; border-radius: 8px;
+    }
+
+    .gallery-item.adjacent { width: 32px; height: 32px; }
+    .gallery-item.adjacent .img-container { --img-size: 24px; }
+
+    .gallery-item.far { width: 24px; height: 24px; opacity: 0.5; }
+    .gallery-item.far .img-container { --img-size: 18px; }
+
+    .gallery-item[data-category="blue"] { --glow: #5285D6; }
+    .gallery-item[data-category="green"] { --glow: #81C784; }
+    .gallery-item[data-category="yellow"] { --glow: #CFCDAB; }
+    .gallery-item[data-category="red"] { --glow: #D94C4C; }
+
+    #back-link {
+        position: absolute;
+        left: 20px;
+        bottom: 20px;
+        font-family: Tahoma, sans-serif;
+        font-weight: bold;
+        font-size: 12px;
+        color: #ccc;
+        text-decoration: none;
+        z-index: 100;
+    }
+
+    #back-link:hover { color: #fff; }
+
+    #credit-text {
+        position: absolute;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        font-family: Tahoma, sans-serif;
+        font-weight: bold;
+        font-style: italic;
+        font-size: 10px;
+        color: #aaa;
+        z-index: 100;
+    }
+
+    @media (max-width: 768px) {
+        .header-block { width: 220px; }
+        .item-name-block { font-size: 18px; top: 10%; }
+        .counter-wrapper { bottom: 12%; }
+        .counter-block { font-size: 0.9rem; }
+        .gallery-wrapper { min-height: 160px; padding: 0 5vw; }
+        .gallery-item.active { width: 65px; height: 65px; }
+        .mana-gem { width: 28px; height: 28px; }
+        #search-input { --search-width: 280px; font-size: 0.9rem; padding: 8px 12px; }
+        #back-link { left: 15px; bottom: 18px; font-size: 11px; }
+        #credit-text { font-size: 7px; bottom: 18px; }
+    }
+</style>
+</head>
+<body>
+
+<!-- HORIZONTAL GRID BACKGROUND -->
+<div class="bg-grid"></div>
+
+<!-- TITLE IMAGE -->
+<div class="lower-group">
+    <img src="https://i.imgur.com/sgZK3Tm.png" alt="Mala'Kar Gallery" class="header-block">
+</div>
+
+<!-- GALLERY + NAME + COUNTER BELOW -->
+<div class="gallery-wrapper">
+    <div class="gallery" id="gallery"></div>
+    <div class="item-name-block" id="item-name">Beads</div>
+    <div class="counter-wrapper">
+        <div class="counter-block" id="counter">1 / 40</div>
+    </div>
+</div>
+
+<!-- MANA GEMS + SEARCH -->
+<div class="upper-group">
+    <div class="mana-gems-block">
+        <div class="gem-column">
+            <span class="gem-cost" id="cost-blue">0</span>
+            <img src="https://i.imgur.com/p2fJvfX.png" alt="Blue" class="mana-gem" id="gem-blue">
+        </div>
+        <div class="gem-column">
+            <span class="gem-cost" id="cost-green">0</span>
+            <img src="https://i.imgur.com/r88P9G0.png" alt="Green" class="mana-gem" id="gem-green">
+        </div>
+        <div class="gem-column">
+            <span class="gem-cost" id="cost-red">0</span>
+            <img src="https://i.imgur.com/wJniNiq.png" alt="Red" class="mana-gem" id="gem-red">
+        </div>
+    </div>
+    <div class="search-block">
+        <input type="search" id="search-input" placeholder="Search items...">
+    </div>
+</div>
+
+<a href="https://wiki.ironco.re/index.php?title=NPCs" id="back-link">Back</a>
+<div id="credit-text">Credit: ResTTe, Drake and Kubik Betona.</div>
+
+<script>
+/* ---------- RESPONSIVE CONFIG ---------- */
+let ADJACENT_DISTANCE = 75;
+let GAP_FAR = -25;
+let CENTER_WIDTH = 75;
+let ADJACENT_WIDTH = 40;
+let FAR_WIDTH = 30;
+
+const updateConfig = () => {
+    const vw = window.innerWidth / 100;
+    ADJACENT_DISTANCE = Math.max(60, vw * 8);
+    GAP_FAR = -Math.max(20, vw * 2);
+    CENTER_WIDTH = Math.max(70, vw * 7);
+    ADJACENT_WIDTH = Math.max(35, vw * 3.5);
+    FAR_WIDTH = Math.max(25, vw * 2.5);
+};
+updateConfig();
+window.addEventListener('resize', () => { updateConfig(); render(); });
+
+/* ---------- FULL 40 ITEMS ---------- */
+const rawItems = [
+    {id:"beads",name:"Beads",cost:1,cat:"red",img:"https://wiki.ironco.re/images/3/33/Beads.gif"},
+    {id:"beholder-shield",name:"Beholder Shield",cost:15,cat:"green",img:"https://i.imgur.com/pOpXi9a.png"},
+    {id:"blue-robe",name:"Blue Robe",cost:5,cat:"blue",img:"https://i.imgur.com/ZEKaa28.png"},
+    {id:"boots-of-haste",name:"Boots of Haste",cost:10,cat:"blue",img:"https://i.imgur.com/aNyF0Xn.png"},
+    {id:"bottle-of-whisky",name:"Bottle of Whisky",cost:3,cat:"green",img:"https://wiki.ironco.re/images/0/0c/BottleOfWhisky.gif"},
+    {id:"bright-sword",name:"Bright Sword",cost:8,cat:"blue",img:"https://i.imgur.com/QIYi3mi.png"},
+    {id:"crown-armor",name:"Crown Armor",cost:6,cat:"red",img:"https://i.imgur.com/yUYvrTq.png"},
+    {id:"crown-helmet",name:"Crown Helmet",cost:15,cat:"blue",img:"https://i.imgur.com/2PYFTyK.gif"},
+    {id:"crown-legs",name:"Crown Legs",cost:25,cat:"blue",img:"https://i.imgur.com/2IMT5ew.gif"},
+    {id:"crown-shield",name:"Crown Shield",cost:20,cat:"blue",img:"https://i.imgur.com/gr0Xz3d.gif"},
+    {id:"crystal-necklace",name:"Crystal Necklace",cost:6,cat:"blue",img:"https://wiki.ironco.re/images/e/ef/CrystalNecklace.png"},
+    {id:"crystal-ring",name:"Crystal Ring",cost:3,cat:"blue",img:"https://wiki.ironco.re/images/2/2f/CrystalRing.png"},
+    {id:"dark-boots",name:"Dark Boots",cost:7,cat:"blue",img:"https://i.imgur.com/gq5Dxv1.png"},
+    {id:"dark-legs",name:"Dark Legs",cost:2,cat:"blue",img:"https://wiki.ironco.re/images/f/fb/DarkLegs.png"},
+    {id:"devil-helmet",name:"Devil Helmet",cost:8,cat:"blue",img:"https://i.imgur.com/u9ijwVP.png"},
+    {id:"dragon-hammer",name:"Dragon Hammer",cost:2,cat:"blue",img:"https://i.imgur.com/rTKkzwy.png"},
+    {id:"dragon-shield",name:"Dragon Shield",cost:3,cat:"red",img:"https://i.imgur.com/NdAwiQi.png"},
+    {id:"dwarven-axe",name:"Dwarven Axe",cost:9,cat:"blue",img:"https://i.imgur.com/0OuZftl.png"},
+    {id:"dwarven-shield",name:"Dwarven Shield",cost:2,cat:"blue",img:"https://i.imgur.com/5scwg5O.png"},
+    {id:"green-robe",name:"Green Robe",cost:6,cat:"blue",img:"https://i.imgur.com/Rs3kBRZ.png"},
+    {id:"guardian-shield",name:"Guardian Shield",cost:12,cat:"blue",img:"https://i.imgur.com/pzkQxYt.gif"},
+    {id:"holy-scroll",name:"Holy Scroll",cost:3,cat:"red",img:"https://wiki.ironco.re/images/3/34/HolyScroll.png"},
+    {id:"knight-armor",name:"Knight Armor",cost:15,cat:"blue",img:"https://i.imgur.com/J6zDSRx.png"},
+    {id:"knight-axe",name:"Knight Axe",cost:3,cat:"blue",img:"https://i.imgur.com/V1JvGh7.png"},
+    {id:"knight-legs",name:"Knight Legs",cost:15,cat:"blue",img:"https://i.imgur.com/vSqWmL3.png"},
+    {id:"magical-lamp",name:"Magical Lamp",cost:5,cat:"blue",img:"https://wiki.ironco.re/images/0/0e/SmallOilLamp.png"},
+    {id:"mystic-turban",name:"Mystic Turban",cost:2,cat:"blue",img:"https://i.imgur.com/1OLcL6Y.png"},
+    {id:"noble-armor",name:"Noble Armor",cost:5,cat:"blue",img:"https://i.imgur.com/QAHaYfE.png"},
+    {id:"oil-lamp",name:"Oil Lamp",cost:2,cat:"red",img:"https://wiki.ironco.re/images/b/b9/OilLamp.png"},
+    {id:"paladin-armor",name:"Paladin Armor",cost:20,cat:"blue",img:"https://wiki.ironco.re/images/5/5f/PaladinArmor.png"},
+    {id:"platinum-amulet",name:"Platinum Amulet",cost:4,cat:"blue",img:"https://i.imgur.com/pZBGzx7.gif"},
+    {id:"red-robe",name:"Red Robe",cost:5,cat:"blue",img:"https://i.imgur.com/8flk9DE.png"},
+    {id:"silver-dagger",name:"Silver Dagger",cost:1,cat:"blue",img:"https://wiki.ironco.re/images/1/17/SilverDagger.png"},
+    {id:"silver-mace",name:"Silver Mace",cost:10,cat:"blue",img:"https://i.imgur.com/UaWPu1m.png"},
+    {id:"spike-sword",name:"Spike Sword",cost:3,cat:"blue",img:"https://i.imgur.com/Rbx2lno.png"},
+    {id:"steel-boots",name:"Steel Boots",cost:5,cat:"red",img:"https://i.imgur.com/VG4Z5Ay.gif"},
+    {id:"stone-skin-amulet",name:"Stone Skin Amulet",cost:1,cat:"red",img:"https://i.imgur.com/Acly2ao.gif"},
+    {id:"strange-helmet",name:"Strange Helmet",cost:6,cat:"blue",img:"https://i.imgur.com/JJqKpyo.png"},
+    {id:"warrior-helmet",name:"Warrior Helmet",cost:10,cat:"blue",img:"https://i.imgur.com/kpj25Wo.gif"},
+    {id:"wedding-ring",name:"Wedding Ring",cost:1,cat:"red",img:"https://i.imgur.com/lUlTIzl.gif"}
+].sort((a,b) => a.id.localeCompare(b.id));
+
+/* ---------- DOM & RENDER ---------- */
+const gallery = document.getElementById('gallery');
+const counterEl = document.getElementById('counter');
+const itemNameEl = document.getElementById('item-name');
+const headerImg = document.querySelector('.header-block');
+const costBlue = document.getElementById('cost-blue');
+const costGreen = document.getElementById('cost-green');
+const costRed = document.getElementById('cost-red');
+const gemBlue = document.getElementById('gem-blue');
+const gemGreen = document.getElementById('gem-green');
+const gemRed = document.getElementById('gem-red');
+const searchInput = document.getElementById('search-input');
+
+rawItems.forEach(it => {
+    const el = document.createElement('div');
+    el.className = 'gallery-item';
+    el.dataset.id = it.id;
+    el.dataset.category = it.cat;
+    el.dataset.cost = it.cost;
+    el.innerHTML = `
+        <div class="name">${it.name}</div>
+        <div class="img-row">
+            <div class="img-container">
+                <img src="${it.img}" alt="${it.name}" loading="lazy">
+            </div>
+            <div class="cost">${it.cost}</div>
+        </div>
+    `;
+    el.onclick = () => setCenter(filteredItems.indexOf(it));
+    gallery.appendChild(el);
+});
+const items = [...gallery.children];
+
+let centerIdx = 0;
+let filteredItems = [...rawItems];
+let searchQuery = '';
+
+function render() {
+    const wrapper = document.querySelector('.gallery-wrapper');
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const centerX = wrapperRect.width / 2;
+
+    filteredItems = rawItems.filter(item =>
+        item.name.toLowerCase().includes(searchQuery) ||
+        item.id.replace(/-/g, ' ').includes(searchQuery)
+    );
+    centerIdx = Math.max(0, Math.min(centerIdx, filteredItems.length - 1));
+    counterEl.textContent = filteredItems.length > 0 ? `${centerIdx + 1} / ${filteredItems.length}` : '0 / 0';
+
+    const currentItem = filteredItems[centerIdx];
+    if (currentItem) {
+        itemNameEl.textContent = currentItem.name;
+        const activeItem = items[rawItems.indexOf(currentItem)];
+        const glow = activeItem ? getComputedStyle(activeItem).getPropertyValue('--glow').trim() : '';
+        itemNameEl.style.textShadow = glow ? `0 0 10px ${glow}` : '0 0 10px transparent';
+        
+        // UPDATE HEADER GLOW
+        headerImg.style.setProperty('--header-glow', glow || 'transparent');
+    } else {
+        itemNameEl.textContent = '';
+        itemNameEl.style.textShadow = '0 0 10px transparent';
+        headerImg.style.setProperty('--header-glow', 'transparent');
+    }
+
+    [gemBlue, gemGreen, gemRed].forEach(g => g.classList.remove('active'));
+    [costBlue, costGreen, costRed].forEach(c => {
+        c.textContent = '0';
+        c.classList.remove('visible');
+        c.style.textShadow = '0 0 6px transparent';
+    });
+
+    if (currentItem) {
+        const cat = currentItem.cat;
+        const cost = currentItem.cost;
+        const gem = cat === 'blue' ? gemBlue : cat === 'green' ? gemGreen : gemRed;
+        const costEl = cat === 'blue' ? costBlue : cat === 'green' ? costGreen : costRed;
+        const activeItem = items[rawItems.indexOf(currentItem)];
+        const glow = activeItem ? getComputedStyle(activeItem).getPropertyValue('--glow').trim() : '';
+        gem.classList.add('active');
+        costEl.textContent = cost;
+        costEl.classList.add('visible');
+        if (glow) costEl.style.textShadow = `0 0 6px ${glow}`;
+    }
+
+    items.forEach((el, i) => {
+        const item = rawItems[i];
+        const filteredIndex = filteredItems.indexOf(item);
+        const d = filteredIndex - centerIdx;
+        el.style.display = filteredItems.includes(item) ? 'flex' : 'none';
+        el.className = 'gallery-item';
+
+        if (d === 0 && filteredItems.length > 0) {
+            el.classList.add('active');
+            el.style.left = `${centerX - CENTER_WIDTH / 2}px`;
+            el.style.top = '50%';
+            el.style.transform = 'translateY(-50%)';
+        } else if (d === 1) {
+            const x = centerX + ADJACENT_DISTANCE;
+            el.classList.add('adjacent');
+            el.style.left = `${x - ADJACENT_WIDTH / 2}px`;
+            el.style.top = '50%';
+            el.style.transform = 'translateY(-50%)';
+        } else if (d === 2) {
+            const x = centerX + ADJACENT_DISTANCE + ADJACENT_WIDTH + GAP_FAR + (FAR_WIDTH / 2);
+            el.classList.add('far');
+            el.style.left = `${x - FAR_WIDTH / 2}px`;
+            el.style.top = '50%';
+            el.style.transform = 'translateY(-50%)';
+        } else if (d === -1) {
+            const x = centerX - ADJACENT_DISTANCE;
+            el.classList.add('adjacent');
+            el.style.left = `${x - ADJACENT_WIDTH / 2}px`;
+            el.style.top = '50%';
+            el.style.transform = 'translateY(-50%)';
+        } else if (d === -2) {
+            const x = centerX - ADJACENT_DISTANCE - ADJACENT_WIDTH - GAP_FAR - (FAR_WIDTH / 2);
+            el.classList.add('far');
+            el.style.left = `${x - FAR_WIDTH / 2}px`;
+            el.style.top = '50%';
+            el.style.transform = 'translateY(-50%)';
+        } else {
+            el.style.display = 'none';
+        }
+    });
+}
+render();
+
+/* ---------- NAVIGATION ---------- */
+function setCenter(idx) {
+    if (idx >= 0 && idx < filteredItems.length) {
+        centerIdx = idx;
+        render();
+    }
+}
+
+document.querySelector('.gallery-wrapper').addEventListener('wheel', e => {
+    e.preventDefault();
+    const dir = e.deltaY > 0 ? 1 : -1;
+    const next = centerIdx + dir;
+    if (next >= 0 && next < filteredItems.length) setCenter(next);
+}, { passive: false });
+
+searchInput.addEventListener('focus', function() {
+    if (!this.dataset.placeholder) {
+        this.dataset.placeholder = this.placeholder;
+        this.placeholder = '';
+    }
+});
+searchInput.addEventListener('blur', function() {
+    if (this.dataset.placeholder) {
+        this.placeholder = this.dataset.placeholder;
+        delete this.dataset.placeholder;
+    }
+});
+searchInput.addEventListener('input', e => {
+    searchQuery = e.target.value.trim().toLowerCase();
+    centerIdx = 0;
+    render();
+});
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft' && centerIdx > 0) setCenter(centerIdx - 1);
+    if (e.key === 'ArrowRight' && centerIdx < filteredItems.length - 1) setCenter(centerIdx + 1);
+});
+</script>
+</body>
+</html>
